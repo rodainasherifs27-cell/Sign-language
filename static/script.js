@@ -231,4 +231,24 @@ function displayResult(data) {
     const letter = data.letter || 'A';
     const description = aslAlphabet[letter]?.description || 'No description available.';
     letterDescription.textContent = description;
+    async function sendImage() {
+    const fileInput = document.getElementById("fileUpload");
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert("Please upload an image!");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("/predict", {
+        method: "POST",
+        body: formData
+    });
+
+    const data = await res.json();
+    document.getElementById("result").innerText =
+        `Prediction: ${data.class} (Confidence: ${data.confidence})`;
 }
